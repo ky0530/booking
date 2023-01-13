@@ -326,7 +326,7 @@ public class AdminHome extends JFrame {
         tableBooking = new JTable();
         scrollPane.setViewportView(tableBooking);
         //Just click on a row in the table and the data for that row will be displayed where it is already prepared.
-        scrollPane.addMouseListener(new MouseAdapter() 
+        tableBooking.addMouseListener(new MouseAdapter() 
         {
          	@Override
          	public void mouseClicked(MouseEvent e) 
