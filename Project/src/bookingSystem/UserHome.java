@@ -84,10 +84,10 @@ public class UserHome extends JFrame {
     }
 
     public UserHome() {
-
+    	//constructor
     }
     
-    
+    //User Home page which receive userID and user Name when login
     public UserHome(int userID, String userName) {
     	setTitle("User Home page");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -99,6 +99,7 @@ public class UserHome extends JFrame {
         
         JLabel label = new JLabel("");
         label.setBounds(62, 223, 0, 0);
+        //The window will display different user name in the title
         JLabel lblNewLabel = new JLabel("Hi "+userName+"! Welcome to UTHM Examiniation Hall Booking System");
         lblNewLabel.setBounds(10, 10, 1430, 37);
         lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -353,9 +354,9 @@ public class UserHome extends JFrame {
 		          		}   
 		   	        
 		   	        for (int i=0; i < phoneNumber.length() ; i++)
-		   	        {	//check have punctuation or alphabet,if yes, cannot insert to the database
-		   	        	//the length of phone number is set as 10 and 11
+		   	        {	//check have punctuation or alphabet,if yes, cannot insert to the database		   	        	
 		   	            char ch = phoneNumber.charAt(i);
+		   	            //the length of phone number is set as 10 and 11
 		   	            int no = phoneNumber.length();
 		   	            if(no < 10 || no > 11)
 		   	            {
@@ -370,7 +371,7 @@ public class UserHome extends JFrame {
 		   	            	result2 = false;
 		   	            }
 		   	            
-		          		}   
+		          	}   
 		   	        
 		   	        for (int i=0; i < staffID.length() ; i++)
 		   	        {//check if have punctuation or number,if yes, cannot insert to the database
@@ -443,7 +444,7 @@ public class UserHome extends JFrame {
 		                 Connection con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/swing_demo","root", "Yky010530");
 		                //insert the data into database
 		                 PreparedStatement st = (PreparedStatement) con.prepareStatement("insert into bookingdetail (Name, PhoneNumber, StaffId, CourseCode, CourseName, Faculty, Year, Month, Day, Start, End, ClassSize,userID, venue) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-		
+		                 
 		                 st.setString(1, name);
 		                 st.setString(2, phoneNumber);
 		                 st.setString(3, staffID);
@@ -463,15 +464,15 @@ public class UserHome extends JFrame {
 		                 JOptionPane.showMessageDialog(null, "Booking successfully! Your request is processing");   
 		                 
 		                 UserHome el = new UserHome(userID, userName);
-		                 dispose();
-		                 el.setVisible(true);
+		                 dispose();// the current page close 
+		                 el.setVisible(true); //display userHome page
 		             	} catch (SQLException sqlException) {
 		             			sqlException.printStackTrace();
 		             	}
 		   	        }}
            	}});
            
-           
+           //Cancel booking button- click to cancel the booking
            JButton cancelButton = new JButton("Cancel Booking");
            cancelButton.setBackground(UIManager.getColor("Button.background"));
            cancelButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -479,32 +480,16 @@ public class UserHome extends JFrame {
            contentPane.add(cancelButton);
            cancelButton.addActionListener(new ActionListener() {
            	public void actionPerformed(ActionEvent e) {
-           	 try {
-                 Connection con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/swing_demo",
-                     "root", "Yky010530");
-                 int row = Jtable_display.getSelectedRow();
-                 String value =(Jtable_display.getModel().getValueAt(row, 0).toString());
-                 int a = JOptionPane.showConfirmDialog(null, "Are you sure to cancel this booking?");
-                 // JOptionPane.setRootFrame(null);
-                 if (a == JOptionPane.YES_OPTION) {               
-                 String query = "DELETE FROM bookingdetail where bookingID = "+value;
-                 PreparedStatement st = (PreparedStatement) con.prepareStatement(query);
-                 st.executeUpdate();
-                 JOptionPane.showMessageDialog(null, "Cancel booking successfully!"); 
-                 show_user(userID);
-                 }
-         	} catch (SQLException sqlException) {
-     			sqlException.printStackTrace();
-     	}                
+           	cancelBooking(userID); //select the row that want to delete and click the button to delte
            	}});
            
-           
+           //Change Password button - user can change (update) their password of the account
            JButton ChangePassButton = new JButton("Change Password\r\n");
            ChangePassButton.addActionListener(new ActionListener() {
            	public void actionPerformed(ActionEvent e) {
-                    UserChangePassword bo = new UserChangePassword(userID);
+                    UserChangePassword bo = new UserChangePassword(userID); 
                     bo.setTitle("Change Password");
-                    bo.setVisible(true);
+                    bo.setVisible(true); //Change Password window is poped out and user can input new password
            	}
            });
            ChangePassButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -520,13 +505,14 @@ public class UserHome extends JFrame {
            contentPane.add(logOutButton);
            logOutButton.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e) {
+        	   //pop up a confirm window to let user confirm log out
            		int a = JOptionPane.showConfirmDialog(null, "Are you sure to log out?");
-                // JOptionPane.setRootFrame(null);
-                if (a == JOptionPane.YES_OPTION) {
-                    dispose();
+              //if user select yes, then logout and back to log in page
+                if (a == JOptionPane.YES_OPTION) { 
+                    dispose(); //current frame(user home page)close
                     UserLogin obj = new UserLogin();
-                    obj.setTitle("Student-Login");
-                    obj.setVisible(true);
+                    obj.setTitle("Student-Login"); //set the totle of the login page as Student Login
+                    obj.setVisible(true); //the user login page is visible to the user (mean navigate to user login page)
                 }
                
            	}
@@ -562,6 +548,35 @@ public class UserHome extends JFrame {
  		{
 			e1.printStackTrace();
  		}
+    }
+    //User can cancel their booking through this function
+    public void cancelBooking(int userID)
+    {
+    	 try {
+    		 //connect to the mysql server
+             Connection con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/swing_demo",
+                 "root", "Yky010530");
+             int row = Jtable_display.getSelectedRow(); //get the row in the table which is selected by the user
+             if (row <0)
+             { //if no row is selcted, pop up a message window to notify user select a row first
+            	 JOptionPane.showMessageDialog(null, "Please select a row first!");
+             }
+             else {//if a row is selected, then carried out cancellation of booking
+             String value =(Jtable_display.getModel().getValueAt(row, 0).toString());//to get the all data in the selected row 
+             int a = JOptionPane.showConfirmDialog(null, "Are you sure to cancel this booking?"); //Confirmation window of cancel booking
+             //if user select yes, then system will select the data from database and delete it
+             if (a == JOptionPane.YES_OPTION) {               
+            	 //delete the data by referring the booking ID(the primary key of the database)
+             String query = "DELETE FROM bookingdetail where bookingID = "+value;
+             PreparedStatement st = (PreparedStatement) con.prepareStatement(query);
+             st.executeUpdate(); //execute the query
+             JOptionPane.showMessageDialog(null, "Cancel booking successfully!");  //pop up window to notify the user has successfully delete booking
+             show_user(userID); //display all data after deletion in the table 
+             }
+             }
+     	} catch (SQLException sqlException) {
+ 			sqlException.printStackTrace();
+ 	}                
     }
     
 }
