@@ -511,17 +511,12 @@ public class UserHome extends JFrame {
                 if (a == JOptionPane.YES_OPTION) { 
                     dispose(); //current frame(user home page)close
                     UserLogin obj = new UserLogin();
-                    obj.setTitle("Student-Login"); //set the totle of the login page as Student Login
+                    obj.setTitle("Student-Login"); //set the title of the login page as Student Login
                     obj.setVisible(true); //the user login page is visible to the user (mean navigate to user login page)
                 }
                
            	}
-           });
-           
-           
-          
-           
-           
+           });        
     }
     
  
@@ -549,6 +544,7 @@ public class UserHome extends JFrame {
 			e1.printStackTrace();
  		}
     }
+	
     //User can cancel their booking through this function
     public void cancelBooking(int userID)
     {
