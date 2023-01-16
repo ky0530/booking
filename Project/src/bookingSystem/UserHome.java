@@ -438,7 +438,7 @@ public class UserHome extends JFrame {
 		   	        }
 		   	        
           		
-		   	        else if (result5 = false)
+		   	        else if (result5 == false)
 		   	        { //if all information valid, then insert into the database and display at the Jtable
 		             try {
 		            	 //connect to the server
