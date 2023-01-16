@@ -407,6 +407,7 @@ public class UserHome extends JFrame {
 		   	            char ch = courseName.charAt(i);
 		   	            if(specialCharactersString.contains(Character.toString(ch)) || number.contains(Character.toString(ch))) {
 		   	             JOptionPane.showMessageDialog(null, "Error! Please dont put special character in course name");
+					result5 = true;
 		   	            	break;
 		   	            }
 		   	        }
