@@ -316,6 +316,7 @@ public class UserHome extends JFrame {
            btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
            btnNewButton_1.setBounds(206, 560, 227, 39);
            contentPane.add(btnNewButton_1);
+           
            btnNewButton_1.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e) { //fill in the booking detail and check the validity of the detail then insert the data into the database
         	   	String name = nameField.getText();				//read name
@@ -340,18 +341,19 @@ public class UserHome extends JFrame {
 	          		String specialCharactersString = "!@#$%&*()'+,-./:;<=>?[]^_`{|}";
 	          		String specialCharactersStringAndSpace = "!@#$%&*()'+,-./:;<=>?[]^_` {|}";
 	          		String number = "01234567890";
+	          		
 	          		boolean result1 = false, result2 = false, result3 = false,result4 = false,result5 = false;
 		   	        for (int i=0; i < name.length() ; i++)
 		   	        { //check have punctuation or number,if yes, cannot insert to the database
 		   	            char ch = name.charAt(i);
 		   	            if(specialCharactersString.contains(Character.toString(ch)) || number.contains(Character.toString(ch))) {
-		   	            	result1 = true;
+		   	            	JOptionPane.showMessageDialog(null, "Error! Please dont put special character and number in name");
 		   	            	break;
 		   	            }
 		   	            else if(i == name.length()-1) { 
 		   	            	result1 = false;
 		   	            }
-		          		}   
+		          	}   
 		   	        
 		   	        for (int i=0; i < phoneNumber.length() ; i++)
 		   	        {	//check have punctuation or alphabet,if yes, cannot insert to the database		   	        	
@@ -360,11 +362,11 @@ public class UserHome extends JFrame {
 		   	            int no = phoneNumber.length();
 		   	            if(no < 10 || no > 11)
 		   	            {
-		   	            	result2=true;
+		   	            	JOptionPane.showMessageDialog(null, "Error! Phone number too short or too long");
 		   	            	break;
 		   	            }
 		   	            else if(specialCharactersStringAndSpace.contains(Character.toString(ch)) || (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z')) {
-		   	            	result2 = true;
+		   	            	JOptionPane.showMessageDialog(null, "Error! Please dont put special character and space in phone number ");
 		   	            	break;
 		   	            }
 		   	            else if(i == phoneNumber.length()-1 ) {    
@@ -377,13 +379,13 @@ public class UserHome extends JFrame {
 		   	        {//check if have punctuation or number,if yes, cannot insert to the database
 		   	            char ch = staffID.charAt(i);
 		   	            if(specialCharactersStringAndSpace.contains(Character.toString(ch)) || number.contains(Character.toString(ch))) {
-		   	            	result3 = true;
+		   	            	JOptionPane.showMessageDialog(null, "Error! Please dont put special character, space and number in staff ID");
 		   	            	break;
 		   	            }
 		   	            else if(i == staffID.length()-1) { 
 		   	            	result3 = false;
 		   	            }
-		          		}   
+		          	}   
 		   	        
 		   	        
 		   	        for (int i=0; i < courseCode.length() ; i++)
@@ -392,7 +394,7 @@ public class UserHome extends JFrame {
 		   	            char ch = courseCode.charAt(i);
 		   	            int no = courseCode.length();
 		   	            if(specialCharactersStringAndSpace.contains(Character.toString(ch))) {
-		   	            	result4 = true;
+		   	            	JOptionPane.showMessageDialog(null, "Error! Please dont put special character and space in course code");
 		   	            	break;
 		   	            }
 		   	            else if(i == courseCode.length()-1) { 
@@ -400,29 +402,24 @@ public class UserHome extends JFrame {
 		   	            }
 		   	            else if (no != 8)
 		   	            {
-		   	            	result4= true;
+		   	            	JOptionPane.showMessageDialog(null, "Error! Course Code too short or too long");
 		   	            }
-		          		}   
+		          	}   
 		   	        
 		   	        for (int i=0; i < courseName.length() ; i++)
 		   	        {	//check have punctuation,if yes, cannot insert to the database
 		   	            char ch = courseName.charAt(i);
 		   	            if(specialCharactersString.contains(Character.toString(ch)) || number.contains(Character.toString(ch))) {
-		   	            	result5 = true;
+		   	             JOptionPane.showMessageDialog(null, "Error! Please dont put special character in course name");
 		   	            	break;
 		   	            }
 		   	            else if(i == courseName.length()-1) { 
 		   	            	result5 = false;
 		   	            }
-		          		} 
-		 	      
-		   	        if (result1 == true || result2 == true || result3 == true || result4 == true || result5 == true) 
-		   	        {
-		   	        	//pop up to warn user input correct information
-			    	        JOptionPane.showMessageDialog(null, "Error! Please input correct booking info");
-		          	}	
+		          	} 
+		 	 
 		   	        
-		   	        else if (start>=end) { //start time cannot after the end time
+		   	        if (start>=end) { //start time cannot after the end time
 		   	        	 JOptionPane.showMessageDialog(null, "Error! Please select correct time and date");
 		   	        }
 		   	        else if (year%4 == 0 && month == 2 && day >29 ) //Leap month February has 29 days,if user choose more than 29,pop up a window and the data not save in the database
@@ -436,7 +433,11 @@ public class UserHome extends JFrame {
 		   	        else if (month ==4 || month == 6 || month == 9 || month == 11 && day>30)
 		   	        {
 		   	        	JOptionPane.showMessageDialog(null, "Error! Please select correct time and date");
-		   	        }  	            	           
+		   	        }
+		   	        else if (classSize <= 0) { // no negative value in class size
+		   	        	JOptionPane.showMessageDialog(null, "Error! Please input correct class size ");
+		   	        }
+          		
 		   	        else 
 		   	        { //if all information valid, then insert into the database and display at the Jtable
 		             try {
@@ -516,7 +517,8 @@ public class UserHome extends JFrame {
                 }
                
            	}
-           });        
+           });
+           
     }
     
  
@@ -544,7 +546,6 @@ public class UserHome extends JFrame {
 			e1.printStackTrace();
  		}
     }
-	
     //User can cancel their booking through this function
     public void cancelBooking(int userID)
     {
